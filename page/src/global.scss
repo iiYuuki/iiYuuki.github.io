@@ -4,6 +4,17 @@ body,
 	height: 100%;
 }
 
+#app {
+  min-width: 1000px;
+}
+
+body {
+  font: 14px/150% tahoma,arial,Microsoft YaHei,Hiragino Sans GB,"\u5b8b\u4f53",sans-serif;
+	-webkit-font-smoothing: antialiased;
+    color: #333;
+	background-color: #fff;
+}
+
 // 版心
 .w {
   max-width: 1200px;
@@ -23,4 +34,26 @@ a:visited {
 }
 a:hover {
   color: tomato;
+}
+
+// 阴影
+.shadow {
+  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+      0 3px 1px -2px rgb(0 0 0 / 12%);
+}
+
+// 遮罩过度
+@keyframes maskTransitionHover {
+  @for $i from 0 through 100 {
+    #{$i * 1%} {
+      mask: linear-gradient(rgba(0, 0, 0, 0.7 - 0.2 * $i * 0.01), rgba(0, 0, 0, 0.7 - 0.65 * $i * 0.01));
+    }
+  }
+}
+@keyframes maskTransitionOut {
+  @for $i from 0 through 100 {
+    #{$i * 1%} {
+      mask: linear-gradient(rgba(0, 0, 0, 0.5 + 0.2 * $i * 0.01), rgba(0, 0, 0, 0.05 + 0.7 * $i * 0.01));
+    }
+  }
 }
