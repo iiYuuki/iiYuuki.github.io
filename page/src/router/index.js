@@ -24,13 +24,6 @@ const routes = [
   }
 ]
 
-if (location.host.includes('github')) {
-  routes.map(item => {
-    item.path = '/myPage' + item.path
-    return item
-  })
-}
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
