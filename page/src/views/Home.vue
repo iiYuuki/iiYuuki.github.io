@@ -6,7 +6,10 @@
         <!-- 左侧主区域 -->
         <div class="main-left-box col-8">
 
-          <q-card class="articles">
+          <!-- 内容部分 -->
+          <q-card class="articles"
+                  v-for="(i, index) in 10"
+                  :key="index">
             <q-img src="@/assets/bg1.jpg"></q-img>
             <div class="article-info-box">
               <p>Hello Blog</p>
@@ -19,16 +22,18 @@
         <div class="main-right-box col-3">
 
           <!-- 主用户盒子 -->
-          <q-card class="user-box column items-center">
+          <div class="user-box">
+            <div class="column items-center">
+              <!-- 头像 -->
+              <q-avatar>
+                <q-img src="@/assets/avatar-iyuuki.jpg" />
+              </q-avatar>
 
-            <!-- 头像 -->
-            <q-avatar>
-              <q-img src="@/assets/avatar-iyuuki.jpg" />
-            </q-avatar>
+              <!-- 个性签名 -->
+              <span class="user-signature">{{ userSignature }}</span>
+            </div>
 
-            <!-- 个性签名 -->
-            <span class="user-signature">{{ userSignature }}</span>
-          </q-card>
+          </div>
         </div>
       </div>
     </section>
@@ -114,20 +119,57 @@ export default {
       }
       .main-right-box {
         .user-box {
-          padding: 10px 0;
-          background-color: rgba($color: #fff, $alpha: 0.5);
-          .q-avatar {
-            border-radius: 50%;
-            height: 48px;
-            width: 48px;
-            margin-bottom: 12px;
-            img {
-              width: 100%;
-              height: 100%;
+          position: sticky;
+          top: 1px;
+          filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.45));
+          border-radius: 9px;
+          overflow: hidden;
+          box-shadow: none;
+          transition: all 0.2s;
+          * {
+            transition: all 0.2s;
+          }
+          &:hover {
+            transition: 0.2s;
+            box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+              0 3px 1px -2px rgb(0 0 0 / 12%);
+            filter: none;
+
+            > div {
+              mask: none;
+            }
+            .q-avatar {
+              box-shadow: 0 0 4px rgba($color: #000000, $alpha: 0.5);
             }
           }
-          .user-signature {
-            font-weight: 600;
+          > div {
+            padding: 10px 0;
+            background-color: rgb(246, 239, 233);
+            mask: linear-gradient(
+              90deg,
+              transparent 0%,
+              #000 5%,
+              #000 95%,
+              transparent 100%
+            );
+            .q-avatar {
+              border-radius: 50%;
+              height: 48px;
+              width: 48px;
+              margin-bottom: 12px;
+              cursor: pointer;
+              img {
+                width: 100%;
+                height: 100%;
+              }
+              &:hover {
+                box-shadow: 0 0 4px rgba($color: #000000, $alpha: 0.9);
+              }
+            }
+            .user-signature {
+              font-weight: 600;
+              cursor: default;
+            }
           }
         }
       }

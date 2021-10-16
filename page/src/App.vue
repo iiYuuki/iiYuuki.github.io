@@ -2,7 +2,7 @@
   <div class="main-app">
 
     <!-- 头部 -->
-    <header class="shadow">
+    <header>
 
       <!-- 背景层 -->
       <div class="bg"></div>
@@ -18,18 +18,23 @@
 
         <!-- 右侧导航 -->
         <nav class="header-nav row">
-          <router-link to="/">主页</router-link>
-          <router-link to="/about">关于</router-link>
+          <router-link :to="{name: 'Home'}">主页</router-link>
+          <router-link :to="{name: 'About'}">关于</router-link>
         </nav>
       </div>
     </header>
 
     <!-- 页面内容区域 -->
-    <router-view v-slot="{ Component }">
-      <transition>
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <div class="view-placeholder"></div>
+    <div class="view">
+      <router-view v-slot="{ Component }">
+        <transition name="fade"
+                    mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </div>
+
   </div>
 
 </template>
@@ -52,10 +57,20 @@ export default {
   background-color: #eddfd2;
 }
 header {
-  position: relative;
+  position: fixed;
+  z-index: 2;
+  top: 0;
   height: 100px;
-  background-color: rgba(0, 0, 0, 1);
+  width: 100%;
   margin-bottom: 30px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.75));
   .bg {
     position: absolute;
     top: 0;
@@ -69,16 +84,26 @@ header {
     background-color: rgb(51, 48, 73);
     background-size: 2860px;
     background-position-x: 50%;
+    mask: linear-gradient(
+      90deg,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
   }
   .header-box {
     position: relative;
     z-index: 1;
     height: 100%;
+    padding: 0 16px;
+
     .title {
       span {
         font-size: 18px;
         font-weight: 700;
         color: #eddfd2;
+        cursor: default;
       }
     }
     .header-nav {
@@ -89,7 +114,16 @@ header {
       :deep(a:hover) {
         color: tomato;
       }
+      filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 1));
     }
   }
+}
+.view-placeholder {
+  height: 100px;
+}
+.view {
+  height: calc(100% - 100px);
+  padding-top: 30px;
+  overflow: scroll;
 }
 </style>

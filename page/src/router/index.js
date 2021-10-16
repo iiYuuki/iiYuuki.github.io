@@ -10,12 +10,26 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('../views/test.vue')
+  },
+  {
+    path: '/:catchAll(.*)*',
+    name: '404',
+    component: () => import('../views/404Error.vue')
   }
 ]
+
+if (location.host.includes('github')) {
+  routes.map(item => {
+    item.path = '/myPage/' + item.path
+    return item
+  })
+}
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
