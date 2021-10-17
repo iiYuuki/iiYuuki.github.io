@@ -7,7 +7,7 @@
         <div class="main-left-box col-8">
 
           <!-- 内容部分 -->
-          <q-card class="articles"
+          <q-card class="articles hover-bigger"
                   v-for="(i, index) in 10"
                   :key="index">
             <q-img src="@/assets/bg1.jpg"></q-img>
@@ -22,10 +22,21 @@
         <div class="main-right-box col-3">
 
           <!-- 主用户盒子 -->
-          <div class="user-box">
+          <div class="user-box"
+               @mouseenter="isMouseEnterUserbox = true"
+               @mouseleave="isMouseEnterUserbox = false">
             <div class="column items-center">
               <!-- 头像 -->
-              <q-avatar>
+              <q-avatar :class="!isMouseDownAvatar ? 'hover-bigger' : ''"
+                        @mousedown="isMouseDownAvatar = true"
+                        @mouseup="isMouseDownAvatar = false">
+                <div v-if="isMouseEnterUserbox"
+                     class="neon-circle">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
                 <q-img src="@/assets/avatar-iyuuki.jpg" />
               </q-avatar>
 
@@ -51,12 +62,18 @@ export default {
   setup () {
     const avatarImgURL = ref('')
     const userSignature = ref('Never Mind.')
+    const isMouseEnterUserbox = ref(false)
+    const isMouseDownAvatar = ref(false)
 
     return {
 
       avatarImgURL,
 
-      userSignature
+      userSignature,
+
+      isMouseEnterUserbox,
+
+      isMouseDownAvatar
 
     }
   }
@@ -65,7 +82,6 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  background-color: #eddfd2;
   .main {
     .main-box {
       .main-left-box {
@@ -75,9 +91,10 @@ export default {
           width: 100%;
           height: 300px;
           margin-bottom: 16px;
-          background-color: rgba($color: #000000, $alpha: 0.9);
+          background-color: rgba($color: #000000, $alpha: 0.7);
           cursor: pointer;
           .q-img {
+            opacity: 0.7;
             position: absolute;
             top: 0;
             left: 0;
@@ -88,10 +105,9 @@ export default {
             animation: maskTransitionOut 0.2s forwards linear;
           }
           &:hover {
+            background-color: rgba($color: #000000, $alpha: 0.9);
             .q-img {
               animation: maskTransitionHover 0.2s forwards linear;
-            }
-            .article-info-box {
             }
           }
           .article-info-box {
@@ -134,17 +150,15 @@ export default {
             box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
               0 3px 1px -2px rgb(0 0 0 / 12%);
             filter: none;
-
             > div {
               mask: none;
-            }
-            .q-avatar {
-              box-shadow: 0 0 4px rgba($color: #000000, $alpha: 0.5);
+              background-color: #333;
+              color: #fff;
             }
           }
           > div {
             padding: 10px 0;
-            background-color: rgb(246, 239, 233);
+            background-color: rgba(246, 239, 233, 0.8);
             mask: linear-gradient(
               90deg,
               transparent 0%,
@@ -153,11 +167,22 @@ export default {
               transparent 100%
             );
             .q-avatar {
+              position: relative;
+              z-index: 2;
               border-radius: 50%;
               height: 48px;
               width: 48px;
               margin-bottom: 12px;
               cursor: pointer;
+              box-shadow: 0 0 4px rgba($color: #000000, $alpha: 0.5);
+              .neon-circle {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 0;
+              }
               img {
                 width: 100%;
                 height: 100%;

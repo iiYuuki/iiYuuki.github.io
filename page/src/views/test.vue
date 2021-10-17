@@ -1,18 +1,41 @@
 <template>
-  <div class="mytest">
-    <div></div>
+  <div>
+    <div class="mytest">
+      <div></div>
+    </div>
+    <div class="mytest">
+      <div></div>
+    </div>
+    <div class="neon-circle">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <canvas id="canvas"
+            class="canvas"></canvas>
   </div>
+
 </template>
 
 <script>
-export default {
+import { onMounted } from 'vue'
 
+export default {
+  setup () {
+    onMounted(() => {
+    })
+    return {
+
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .mytest {
   margin: auto;
+  margin-bottom: 20px;
   filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.75));
   div {
     height: 300px;
@@ -26,5 +49,11 @@ export default {
       transparent 100%
     );
   }
+}
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-app">
+  <q-layout class="main-app bg-theme">
 
     <!-- 头部 -->
     <header>
@@ -12,7 +12,7 @@
 
         <!-- 左侧title -->
         <div class="title">
-          <span>iYuuki</span>
+          <span class="text-theme">iYuuki</span>
         </div>
         <div class="col"></div>
 
@@ -35,15 +35,24 @@
       </router-view>
     </div>
 
-  </div>
+    <canvas id="particle"
+            class="canvas"></canvas>
+  </q-layout>
 
 </template>
 
 <script>
+import { onMounted } from 'vue'
+import particle from './utils/particle'
+
 export default {
   name: 'LayoutDefault',
 
   setup () {
+    onMounted(() => {
+      particle.init('particle')
+    })
+
     return {
 
     }
@@ -54,7 +63,6 @@ export default {
 <style lang="scss" scoped>
 .main-app {
   height: 100%;
-  background-color: #eddfd2;
 }
 header {
   position: fixed;
@@ -102,7 +110,6 @@ header {
       span {
         font-size: 18px;
         font-weight: 700;
-        color: #eddfd2;
         cursor: default;
       }
     }
@@ -122,8 +129,18 @@ header {
   height: 100px;
 }
 .view {
+  position: relative;
+  background: transparent;
+  z-index: 1;
   height: calc(100% - 100px);
   padding-top: 30px;
   overflow: scroll;
+}
+#particle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 </style>
