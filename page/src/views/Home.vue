@@ -101,7 +101,7 @@ export default {
             width: 100%;
             height: 100%;
             z-index: 0;
-            mask: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+            mask: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
             animation: maskTransitionOut 0.2s forwards linear;
           }
           &:hover {

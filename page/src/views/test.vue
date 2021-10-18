@@ -3,30 +3,54 @@
     <div class="mytest">
       <div></div>
     </div>
-    <div class="mytest">
-      <div></div>
-    </div>
-    <div class="neon-circle">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <canvas id="canvas"
-            class="canvas"></canvas>
+    <q-btn label="get"
+           @click="get"></q-btn>
+    <input type="file"
+           @change="onChange">
   </div>
 
 </template>
 
 <script>
 import { onMounted } from 'vue'
+import service from '@/api'
 
 export default {
   setup () {
     onMounted(() => {
-    })
-    return {
 
+    })
+
+    function get () {
+      service.get('/')
+        .then(res => {
+          if (res.code === -1) {
+            console.log('err')
+          } else {
+            window.open('http://localhost:3000')
+          }
+        })
+    }
+    function onChange (event) {
+      let file = event.target.files[0]
+      console.log(file)
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = e => {
+        let base64 = e.target.result
+        service.post('/file', {
+          file: base64
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    }
+
+    return {
+      get,
+      onChange
     }
   }
 }

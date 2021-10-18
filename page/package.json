@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "body-parser": "^1.19.0",
+    "connect-multiparty": "^2.2.0",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0-beta.1",
     "vue": "^3.0.0",
