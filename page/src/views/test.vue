@@ -22,30 +22,21 @@ export default {
     })
 
     function get () {
-      service.get('/')
-        .then(res => {
-          if (res.code === -1) {
-            console.log('err')
-          } else {
-            window.open('http://localhost:3000')
-          }
-        })
+      let link = document.createElement('a')
+      link.href = 'http://localhost:3000/'
+      link.setAttribute('download', '')
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
     function onChange (event) {
       let file = event.target.files[0]
-      console.log(file)
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = e => {
-        let base64 = e.target.result
-        service.post('/file', {
-          file: base64
-        }).then(res => {
+      const form = new FormData()
+      form.append('file', file)
+      service.post('/file', form)
+        .then(res => {
           console.log(res)
-        }).catch(err => {
-          console.log(err)
         })
-      }
     }
 
     return {
