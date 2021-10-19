@@ -31,7 +31,15 @@ export default service
 
 // ------接口部分
 
-// 获取iYuuki头像
-export function getIYuukiAvatarImgURL () {
-  return service.post('/iyuuki/avatar')
+// 获取用户头像
+export function getUserAvatarImgURL () {
+  return service.post(
+    '/user/avatar/get')
+}
+
+// 设置用户头像
+export function setUserAvatarImgURL (data) {
+  return service.post(
+    '/user/avatar/set',
+    data)
 }

@@ -2,7 +2,7 @@
   <div class="about">
     <section class="w">
       <h2>This is an about page</h2>
-      <p>Theme desinged by iYuuki</p>
+      <p>Theme desinged by User</p>
     </section>
 
   </div>

@@ -11,6 +11,10 @@ const os = require('os')
 
 const app = express()
 
+const pathOfImgs = getIp() + '/static/imgs/'
+const pathOfDB = getIp() + '/static/db/'
+const CurrentPathOfDB = path.join(__dirname, 'public', 'db')
+
 // 跨域
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -21,8 +25,8 @@ app.all('*', (req, res, next) => {
 })
 
 // 增加解析post请求的中间件
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true, parameterLimit: 50000, limit: '50mb' }))
+app.use(express.json({ limit: '50mb' }))
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 // 监听端口3000
@@ -51,7 +55,7 @@ app.post('/file', uploader.single('file'), (req, res, next) => {
     errno: 0,
     data: [
       {
-        url: getIp() + '/static/imgs/' + req.file.filename,
+        url: pathOfImgs + req.file.filename,
         alt: req.file.originalname,
         href: ''
       }
@@ -59,18 +63,44 @@ app.post('/file', uploader.single('file'), (req, res, next) => {
   }))
 })
 
-// 获取iYuuki头像接口
-app.post('/iyuuki/avatar', (req, res, next) => {
+// 获取用户头像接口
+app.post('/user/avatar/get', (req, res, next) => {
   res.status(200).send({
     code: 200,
-    url: getIp() + '/static/imgs/avatar-iyuuki.jpg'
+    url: getUserData(0).userAvatarURL
   })
 })
+
+// 设置用户头像接口
+app.post('/user/avatar/set', (req, res, next) => {
+  const filename = Date.now() + '.png'
+  const filepath = path.join(__dirname, 'public', 'imgs', filename)
+  const dataBuffer = Buffer.from(req.body.url.split(',')[1], 'base64')
+  fs.writeFile(filepath, dataBuffer, err => {
+    if (err) {
+      res.status(500).send({
+        code: -1
+      })
+    } else {
+      res.status(200).send({
+        code: 200,
+        url: pathOfImgs + filename
+      })
+      setUserData(0, {
+        userAvatarURL: pathOfImgs + filename
+      })
+    }
+  })
+})
+
+// -----------------------接口部分结束
 
 // APP报错时返回500
 app.use((err, req, res, next) => {
   res.status(500).send(err.message)
 })
+
+// -----------------------方法部分
 
 // 返回当前ip+端口号
 function getIp () {
@@ -89,3 +119,41 @@ function getIp () {
     }
   }
 }
+
+// 返回用户数据列表
+function getUserDataList () {
+  const data = fs.readFileSync(path.join(CurrentPathOfDB, 'user.json'))
+  return JSON.parse(data)
+}
+
+// 返回指定用户数据
+function getUserData (id) {
+  const dataArr = getUserDataList()
+  let data
+  dataArr.some(item => {
+    if (item.userID === id) {
+      data = item
+      return item.userID === id
+    }
+  })
+  return data
+}
+
+// 设置用户数据
+function setUserData (id, params) {
+  const dataArr = getUserDataList()
+  dataArr.map((item) => {
+    if (item.userID === id) {
+      for (const i in params) {
+        item[i] = params[i]
+      }
+    }
+  })
+  fs.writeFile(path.join(CurrentPathOfDB, 'user.json'), JSON.stringify(dataArr, null, 2), err => {
+    if (err) {
+      console.log(err)
+    }
+  })
+}
+
+// ------------------------方法部分结束

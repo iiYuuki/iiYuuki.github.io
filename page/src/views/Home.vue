@@ -51,7 +51,7 @@
               <div class="third-platform-account row items-center justify-center">
                 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=nla0KRoCmMkF5TpcMDWlCC6L1-v-iDuf&noverify=0"
                    target="_blank"><i class="iconfont icon-QQ-circle-fill"></i></a>
-                <a href="https://steamcommunity.com/id/iYuukidesu/"
+                <a href="https://steamcommunity.com/id/Userdesu/"
                    target="_blank"><i class="iconfont icon-steam"></i></a>
                 <a href="https://space.bilibili.com/22388335"
                    target="_blank"><i class="iconfont icon-icon_bilibili-circle"></i></a>
@@ -73,7 +73,7 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { getIYuukiAvatarImgURL } from '@/api'
+import { getUserAvatarImgURL } from '@/api'
 
 export default {
   name: 'Home',
@@ -81,13 +81,13 @@ export default {
 
   },
   setup () {
-    const avatarImgURL = ref('http://localhost:3000/static/imgs/avatar-iyuuki.jpg')
+    const avatarImgURL = ref('http://localhost:3000/static/imgs/avatar-User.jpg')
     const userSignature = ref('Never Mind.')
     const isMouseEnterUserbox = ref(false)
     const isMouseDownAvatar = ref(false)
 
-    function getIYuukiAvatarImg () {
-      getIYuukiAvatarImgURL()
+    function getUserAvatarImg () {
+      getUserAvatarImgURL()
         .then(res => {
           if (res.code === 200) {
             avatarImgURL.value = res.url
@@ -100,7 +100,7 @@ export default {
     }
 
     function pageInit () {
-      getIYuukiAvatarImg()
+      getUserAvatarImg()
     }
 
     onMounted(() => {
@@ -228,7 +228,7 @@ export default {
                 left: 0;
                 z-index: 0;
               }
-              img {
+              .q-img {
                 width: 100%;
                 height: 100%;
               }

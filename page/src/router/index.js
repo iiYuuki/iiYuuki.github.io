@@ -3,23 +3,44 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/Home.vue')
+    name: 'Client',
+    component: () => import('../views/Client.vue'),
+    redirect: '/home',
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        component: () => import('../views/Home.vue')
+      },
+      {
+        path: '/about',
+        name: 'About',
+        component: () => import('../views/About.vue')
+      },
+      {
+        path: '/test',
+        name: 'Test',
+        component: () => import('../views/test.vue')
+      },
+      {
+        path: '/article/:id',
+        component: () => import('../views/Article.vue'),
+        props: true
+      }
+    ]
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
-  },
-  {
-    path: '/test',
-    name: 'Test',
-    component: () => import('../views/test.vue')
-  },
-  {
-    path: '/article/:id',
-    component: () => import('../views/Article.vue'),
-    props: true
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue'),
+    redirect: '/admin/user',
+    children: [
+      {
+        path: '/admin/user',
+        name: 'UserManagement',
+        component: () => import('../components/Admin/UserManagement.vue')
+      }
+    ]
   },
   {
     path: '/:catchAll(.*)*',

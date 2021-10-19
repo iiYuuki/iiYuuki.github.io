@@ -112,6 +112,60 @@ a:hover {
   transform: scale(1.02);
 }
 
+// 全局dialog弹窗样式
+.dialog-box {
+  width: 580px;
+  position: relative;
+  border-radius: 20px;
+  .close-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  .title-box {
+    margin: 28px auto 0 auto;
+    .title {
+      text-align: center;
+      font-size: 30px;
+      color: #071334;
+    }
+  }
+  .form-box {
+    .q-field__control{
+      height: 50px;
+    }
+    .input-outer-box {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      font-size: 16px;
+      color: #0c1c48;
+      text-align: right;
+      line-height: 50px;
+      margin-right: 18px;
+    }
+    .cancel-button,
+    .confirm-button {
+      min-width: 109px !important;
+      width: auto !important;
+      height: 40px !important;
+      letter-spacing: 3px;
+    }
+    .cancel-button {
+      border: 1px solid #3767e3;
+      color: #3767e3 !important;
+      background: #fff !important;
+      // box-shadow: 0 3px 6px rgb(0 0 0 / 16%);
+    }
+    .q-btn--push:before {
+      border-bottom: none;
+    }
+  }
+  .operator-btns {
+    padding: 20px 70px;
+  }
+}
+
 //  -------------------色彩定义
 .bg-theme {
   background-color: $themeColor;
