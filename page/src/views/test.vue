@@ -7,7 +7,10 @@
            @click="get"></q-btn>
     <input type="file"
            @change="onChange">
-    <div id="editor"></div>
+    <div id="editor">
+      <p>初始化的内容</p>
+      <p>初始化的内容</p>
+    </div>
   </div>
 
 </template>
@@ -20,24 +23,26 @@ import E from 'wangeditor'
 export default {
 
   setup () {
-
     const editorValue = ref('')
+    let editor
+
+    function initEditor (eID) {
+      editor = new E(eID)
+      editor.config.height = 500
+      editor.config.placeholder = '开始编辑文章吧~'
+      editor.config.uploadImgServer = 'http://localhost:3000/file/'
+      editor.create()
+    }
 
     onMounted(() => {
-      const editor = new E('#editor')
-      editor.create()
+      initEditor('#editor')
     })
 
     function get () {
-      let link = document.createElement('a')
-      link.href = 'http://localhost:3000/'
-      link.setAttribute('download', '')
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      console.log(editor.txt.html())
     }
     function onChange (event) {
-      let file = event.target.files[0]
+      const file = event.target.files[0]
       const form = new FormData()
       form.append('file', file)
       service.post('/file', form)

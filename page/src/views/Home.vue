@@ -41,7 +41,7 @@
                   <span></span>
                   <span></span>
                 </div>
-                <q-img src="@/assets/avatar-iyuuki.jpg" />
+                <q-img :src="avatarImgURL" />
               </q-avatar>
 
               <!-- 个性签名 -->
@@ -72,7 +72,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { getIYuukiAvatarImgURL } from '@/api'
 
 export default {
   name: 'Home',
@@ -80,10 +81,31 @@ export default {
 
   },
   setup () {
-    const avatarImgURL = ref('')
+    const avatarImgURL = ref('http://localhost:3000/static/imgs/avatar-iyuuki.jpg')
     const userSignature = ref('Never Mind.')
     const isMouseEnterUserbox = ref(false)
     const isMouseDownAvatar = ref(false)
+
+    function getIYuukiAvatarImg () {
+      getIYuukiAvatarImgURL()
+        .then(res => {
+          if (res.code === 200) {
+            avatarImgURL.value = res.url
+          } else {
+            console.log('error')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    }
+
+    function pageInit () {
+      getIYuukiAvatarImg()
+    }
+
+    onMounted(() => {
+      pageInit()
+    })
 
     return {
 
