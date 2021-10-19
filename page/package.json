@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@tinymce/tinymce-vue": "^4.0.4",
+    "axios": "^0.23.0",
     "body-parser": "^1.19.0",
     "connect-multiparty": "^2.2.0",
     "core-js": "^3.6.5",
@@ -18,7 +20,8 @@
     "vue": "^3.0.0",
     "vue-cli-plugin-quasar": "^4.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "wangeditor": "^4.7.9"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

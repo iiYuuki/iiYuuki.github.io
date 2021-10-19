@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: () => import('../views/Home.vue')
   },
   {
     path: '/about',
@@ -16,6 +15,11 @@ const routes = [
     path: '/test',
     name: 'Test',
     component: () => import('../views/test.vue')
+  },
+  {
+    path: '/article/:id',
+    component: () => import('../views/Article.vue'),
+    props: true
   },
   {
     path: '/:catchAll(.*)*',

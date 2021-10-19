@@ -20,6 +20,7 @@
         <nav class="header-nav row">
           <router-link :to="{name: 'Home'}">主页</router-link>
           <router-link :to="{name: 'About'}">关于</router-link>
+          <router-link :to="{name: 'Test'}">Test Page</router-link>
         </nav>
       </div>
     </header>
@@ -87,7 +88,7 @@ header {
     width: 100%;
     opacity: 0.9;
     z-index: 0;
-    background-image: url("./assets/home-hotpoint-bg.png");
+    background-image: url('./assets/home-hotpoint-bg.png');
     background-repeat: no-repeat;
     background-color: rgb(51, 48, 73);
     background-size: 2860px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w">
     <div class="mytest">
       <div></div>
     </div>
@@ -7,18 +7,25 @@
            @click="get"></q-btn>
     <input type="file"
            @change="onChange">
+    <div id="editor"></div>
   </div>
 
 </template>
 
 <script>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import service from '@/api'
+import E from 'wangeditor'
 
 export default {
-  setup () {
-    onMounted(() => {
 
+  setup () {
+
+    const editorValue = ref('')
+
+    onMounted(() => {
+      const editor = new E('#editor')
+      editor.create()
     })
 
     function get () {
@@ -40,6 +47,7 @@ export default {
     }
 
     return {
+      editorValue,
       get,
       onChange
     }
@@ -70,5 +78,10 @@ export default {
   top: 0;
   left: 0;
   pointer-events: none;
+}
+.editor-box {
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
 }
 </style>

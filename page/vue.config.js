@@ -9,6 +9,6 @@ module.exports = {
     'quasar'
   ],
   lintOnSave: false,
-  publicPath: './',
+  publicPath: '/',
   productionSourceMap: false
 }

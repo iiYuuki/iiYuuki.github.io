@@ -1,21 +1,24 @@
 <template>
   <div class="home">
     <section class="main">
-      <div class="w main-box row">
+      <div class="w main-box row justify-center">
 
         <!-- 左侧主区域 -->
         <div class="main-left-box col-8">
 
           <!-- 内容部分 -->
-          <q-card class="articles hover-bigger"
-                  v-for="(i, index) in 10"
-                  :key="index">
-            <q-img src="@/assets/bg1.jpg"></q-img>
-            <div class="article-info-box">
-              <p>Hello Blog</p>
-              <span>Nothing..but lies</span>
-            </div>
-          </q-card>
+          <router-link v-for="(i, index) in 10"
+                       :key="index"
+                       :to="`/article/${i}`">
+            <q-card class="articles hover-bigger">
+              <q-img src="@/assets/bg1.jpg"></q-img>
+              <div class="article-info-box">
+                <p>Hello Blog{{ i }}</p>
+                <span>Nothing..but lies</span>
+              </div>
+            </q-card>
+          </router-link>
+
         </div>
 
         <!-- 右侧主区域 -->
@@ -26,6 +29,7 @@
                @mouseenter="isMouseEnterUserbox = true"
                @mouseleave="isMouseEnterUserbox = false">
             <div class="column items-center">
+
               <!-- 头像 -->
               <q-avatar :class="!isMouseDownAvatar ? 'hover-bigger' : ''"
                         @mousedown="isMouseDownAvatar = true"
@@ -41,7 +45,23 @@
               </q-avatar>
 
               <!-- 个性签名 -->
-              <span class="user-signature">{{ userSignature }}</span>
+              <div class="user-signature">{{ userSignature }}</div>
+
+              <!-- 第三方平台账号链接 -->
+              <div class="third-platform-account row items-center justify-center">
+                <a href="https://qm.qq.com/cgi-bin/qm/qr?k=nla0KRoCmMkF5TpcMDWlCC6L1-v-iDuf&noverify=0"
+                   target="_blank"><i class="iconfont icon-QQ-circle-fill"></i></a>
+                <a href="https://steamcommunity.com/id/iYuukidesu/"
+                   target="_blank"><i class="iconfont icon-steam"></i></a>
+                <a href="https://space.bilibili.com/22388335"
+                   target="_blank"><i class="iconfont icon-icon_bilibili-circle"></i></a>
+                <a href="https://tieba.baidu.com/home/main?id=tb.1.b632cb9a.Du5BF1MqLUTChCpMzLPklQ"
+                   target="_blank"><i class="iconfont icon-tieba0"></i></a>
+                <a href="https://music.163.com/#/user/home?id=291899294"
+                   target="_blank"><i class="iconfont icon-netease-cloud-music-fill"></i></a>
+                <a href="https://www.zhihu.com/people/SiroApple"
+                   target="_blank"><i class="iconfont icon-zhihu-circle-fill"></i></a>
+              </div>
             </div>
 
           </div>
@@ -85,7 +105,7 @@ export default {
   .main {
     .main-box {
       .main-left-box {
-        margin-right: 20px;
+        margin-right: 30px;
         .articles {
           position: relative;
           width: 100%;
@@ -155,6 +175,9 @@ export default {
               background-color: #333;
               color: #fff;
             }
+            .third-platform-account a {
+              color: #fff;
+            }
           }
           > div {
             padding: 10px 0;
@@ -194,6 +217,30 @@ export default {
             .user-signature {
               font-weight: 600;
               cursor: default;
+              margin-bottom: 26px;
+            }
+            .third-platform-account {
+              a {
+                transition: none;
+                color: #333;
+                margin: 0 10px 10px;
+                i {
+                  line-height: 42px;
+                  font-size: 42px;
+                  &.icon-steam {
+                    font-size: 38px;
+                  }
+                  &.icon-icon_bilibili-circle {
+                    font-size: 45px;
+                  }
+                }
+                &:hover {
+                  color: pink;
+                }
+                &:link {
+                  font-weight: 400;
+                }
+              }
             }
           }
         }

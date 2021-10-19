@@ -5,5 +5,6 @@ import store from './store'
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import './global.scss'
+import './assets/iconfont/iconfont.css'
 
 createApp(App).use(Quasar, quasarUserOptions).use(store).use(router).mount('#app')
