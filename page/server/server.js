@@ -34,11 +34,11 @@ app.get('/', (req, res) => {
 }
 )
 
-// 上传总方法
+// 上传图片总方法
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // 接收到文件后输出的保存路径（若不存在则需要创建）
-    cb(null, path.join(__dirname, 'public'))
+    cb(null, path.join(__dirname, 'public', 'imgs'))
   },
   filename: function (req, file, cb) {
     // 将保存文件名设置为 时间戳 + 文件原始名，比如 151342376785-123.jpg
@@ -47,16 +47,23 @@ const storage = multer.diskStorage({
 })
 const uploader = multer({ storage: storage })
 app.post('/file', uploader.single('file'), (req, res, next) => {
-  const a = req.file
-  console.log(a)
-  res.status(200).send('ok')
+  res.status(200).send(JSON.stringify({
+    errno: 0,
+    data: [
+      {
+        url: getIp() + '/static/imgs/' + req.file.filename,
+        alt: req.file.originalname,
+        href: ''
+      }
+    ]
+  }))
 })
 
 // 获取iYuuki头像接口
 app.post('/iyuuki/avatar', (req, res, next) => {
   res.status(200).send({
     code: 200,
-    url: 'http://' + getIp() + '/static/imgs/avatar-iyuuki.jpg'
+    url: getIp() + '/static/imgs/avatar-iyuuki.jpg'
   })
 })
 
@@ -70,12 +77,15 @@ function getIp () {
   const f = os.networkInterfaces()
   for (const i in f) {
     const face = f[i]
-    let addr
+    let addr = null
     face.some(item => {
       if (item.address !== '127.0.0.1' && item.family === 'IPv4') {
-        addr = item.address + ':3000'
+        addr = 'http://' + item.address + ':3000'
+        return item.address !== '127.0.0.1' && item.family === 'IPv4'
       }
     })
-    return addr
+    if (addr !== null) {
+      return addr
+    }
   }
 }

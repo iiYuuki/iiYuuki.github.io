@@ -11,19 +11,28 @@
       <p>初始化的内容</p>
       <p>初始化的内容</p>
     </div>
+    <div class="content"
+         style="background: #fff"
+         v-html="ht"
+         v-highlight>
+    </div>
   </div>
 
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import service from '@/api'
 import E from 'wangeditor'
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github-dark-dimmed.css'
 
 export default {
 
   setup () {
     const editorValue = ref('')
+    const ht = ref('')
     let editor
 
     function initEditor (eID) {
@@ -31,7 +40,27 @@ export default {
       editor.config.height = 500
       editor.config.placeholder = '开始编辑文章吧~'
       editor.config.uploadImgServer = 'http://localhost:3000/file/'
+      editor.config.uploadFileName = 'file'
       editor.create()
+    }
+
+    function initMarked (h) {
+      marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        highlight: function (code) {
+          return hljs.highlightAuto(code).value
+        }
+      })
+      const markedData = marked(h, { breaks: true }).replace(/<pre>/g, "<pre class='hljs'>")
+      console.log(markedData)
+      ht.value = markedData
     }
 
     onMounted(() => {
@@ -39,7 +68,8 @@ export default {
     })
 
     function get () {
-      console.log(editor.txt.html())
+      const h = editor.txt.html()
+      initMarked(h)
     }
     function onChange (event) {
       const file = event.target.files[0]
@@ -51,10 +81,24 @@ export default {
         })
     }
 
+    onBeforeUnmount(() => {
+      editor.destroy()
+      editor = null
+    })
+
     return {
       editorValue,
+      ht,
       get,
       onChange
+    }
+  },
+  directives: {
+    highlight: el => {
+      const blocks = el.querySelectorAll('pre code')
+      blocks.forEach(block => {
+        hljs.highlightBlock(block)
+      })
     }
   }
 }
@@ -88,5 +132,8 @@ export default {
   width: 400px;
   height: 300px;
   background-color: #fff;
+}
+code {
+  background: #ccc;
 }
 </style>
