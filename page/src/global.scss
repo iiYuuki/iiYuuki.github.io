@@ -17,7 +17,25 @@ body {
 	background-color: #fff;
 }
 
+h1{
+  font-size: 32px;
+  line-height: 1.5;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 18.72px;
+}
+h4 {
+  font-size: 16px;
+}
+h5 {
+  font-size: 13.28px;
+}
+
 p {
+  font-size: 16px;
   margin: 0;
 }
 
@@ -105,7 +123,7 @@ a:hover {
 }
 ::-webkit-scrollbar-corner,
 ::-webkit-scrollbar-track-piece {
-  background-color: $themeColor;
+  background-color: transparent
 }
 
 // hover 扩张

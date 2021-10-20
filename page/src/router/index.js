@@ -44,6 +44,11 @@ const routes = [
         path: '/admin/article',
         name: 'ArticleManagement',
         component: () => import('../components/Admin/ArticleManagement.vue')
+      },
+      {
+        path: '/admin/article/edit',
+        name: 'ArticleEdit',
+        component: () => import('../components/Admin/ArticleEdit.vue')
       }
     ]
   },

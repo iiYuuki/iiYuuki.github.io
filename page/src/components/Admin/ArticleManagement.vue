@@ -5,7 +5,7 @@
     <div class="articles row">
 
       <!-- 图片 -->
-      <router-link to="/">
+      <router-link to="/admin/article/edit">
         <q-img src="@/assets/bg1.jpg" />
       </router-link>
 
@@ -17,7 +17,7 @@
           <div class="article-category-box">技术</div>
 
           <!-- 标题 -->
-          <router-link to="/">这是文章1</router-link>
+          <router-link to="/admin/article/edit">这是文章1</router-link>
 
         </div>
 

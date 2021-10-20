@@ -209,3 +209,8 @@ function setUserData (id, params) {
 }
 
 // ------------------------方法部分结束
+
+const a = fs.readFileSync('./asd.txt').toString()
+const mat = /#....../g
+const b = a.match(mat)
+console.log(b.length)
