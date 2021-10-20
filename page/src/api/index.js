@@ -32,14 +32,43 @@ export default service
 // ------接口部分
 
 // 获取用户头像
-export function getUserAvatarImgURL () {
+export function getUserAvatarImgURL (data) {
   return service.post(
-    '/user/avatar/get')
+    '/user/avatar/get',
+    data)
 }
 
 // 设置用户头像
 export function setUserAvatarImgURL (data) {
   return service.post(
     '/user/avatar/set',
+    data)
+}
+
+// 获取主页左上角标题
+export function getUserTitle (data) {
+  return service.post(
+    '/user/title/get',
+    data)
+}
+
+// 设置主页左上角标题
+export function setUserTitle (data) {
+  return service.post(
+    '/user/title/set',
+    data)
+}
+
+// 获取第三方平台账号链接
+export function getThirdLinks (data) {
+  return service.post(
+    '/user/thirdlinks/get',
+    data)
+}
+
+// 设置第三方平台账号链接
+export function setThirdLinks (data) {
+  return service.post(
+    '/user/thirdlinks/set',
     data)
 }

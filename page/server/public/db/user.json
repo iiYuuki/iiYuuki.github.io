@@ -4,6 +4,44 @@
     "account": "admin",
     "password": "admin",
     "userTitle": "iYuuki",
-    "userAvatarURL": "http://192.168.2.5:3000/static/imgs/1634669274308.png"
+    "userAvatarURL": "http://192.168.102.129:3000/static/imgs/1634716782583-avatar.png",
+    "thirdLinks": [
+      {
+        "name": "qq",
+        "link": "https://qm.qq.com/cgi-bin/qm/qr?k=nla0KRoCmMkF5TpcMDWlCC6L1-v-iDuf&noverify=0",
+        "enable": true,
+        "iconClass": "iconfont icon-QQ-circle-fill"
+      },
+      {
+        "name": "steam",
+        "link": "https://steamcommunity.com/id/Userdesu/",
+        "enable": true,
+        "iconClass": "iconfont icon-steam"
+      },
+      {
+        "name": "bilibili",
+        "link": "https://space.bilibili.com/22388335",
+        "enable": true,
+        "iconClass": "iconfont icon-icon_bilibili-circle"
+      },
+      {
+        "name": "tieba",
+        "link": "https://tieba.baidu.com/home/main?id=tb.1.b632cb9a.Du5BF1MqLUTChCpMzLPklQ",
+        "enable": true,
+        "iconClass": "iconfont icon-tieba0"
+      },
+      {
+        "name": "wangyiyun",
+        "link": "https://music.163.com/#/user/home?id=291899294",
+        "enable": true,
+        "iconClass": "iconfont icon-netease-cloud-music-fill"
+      },
+      {
+        "name": "zhihu",
+        "link": "https://www.zhihu.com/people/SiroApple",
+        "enable": true,
+        "iconClass": "iconfont icon-zhihu-circle-fill"
+      }
+    ]
   }
 ]

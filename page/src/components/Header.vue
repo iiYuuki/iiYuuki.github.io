@@ -10,7 +10,7 @@
 
       <!-- 左侧title -->
       <div class="title">
-        <span class="text-theme">User</span>
+        <span class="text-theme">{{ title }}</span>
       </div>
       <div class="col"></div>
 
@@ -18,15 +18,61 @@
       <nav class="header-nav row">
         <router-link :to="{name: 'Home'}">主页</router-link>
         <router-link :to="{name: 'About'}">关于</router-link>
-        <router-link :to="{name: 'Test'}">Test Page</router-link>
+        <router-link v-if="isDev"
+                     :to="{name: 'Test'}">Test Page</router-link>
       </nav>
     </div>
   </header>
 </template>
 
 <script>
-export default {
+import { ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { getUserTitle } from '@/api'
 
+export default {
+  setup () {
+    const $q = useQuasar()
+
+    const title = ref('')
+    const isDev = process.env.NODE_ENV !== 'production'
+
+    function getTitle () {
+      getUserTitle()
+        .then(res => {
+          if (res.code !== 200) {
+            $q.notify({
+              message: '页面发生错误！',
+              position: 'top',
+              timeout: 1500,
+              color: 'green'
+            })
+          } else {
+            title.value = res.title
+          }
+        }).catch(err => {
+          console.log(err)
+          $q.notify({
+            message: '页面发生错误！',
+            position: 'top',
+            timeout: 1500,
+            color: 'green'
+          })
+        })
+    }
+
+    onMounted(() => {
+      getTitle()
+    })
+
+    return {
+
+      title,
+
+      isDev
+
+    }
+  }
 }
 </script>
 
@@ -54,7 +100,7 @@ header {
     width: 100%;
     opacity: 0.9;
     z-index: 0;
-    background-image: url("../assets/home-hotpoint-bg.png");
+    background-image: url('../assets/home-hotpoint-bg.png');
     background-repeat: no-repeat;
     background-color: rgb(51, 48, 73);
     background-size: 2860px;

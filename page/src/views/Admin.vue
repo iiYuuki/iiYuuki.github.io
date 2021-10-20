@@ -20,7 +20,7 @@
                 active-bg-color="black">
 
           <!-- 用户管理 -->
-          <q-tab name="user"
+          <q-tab name="/admin/user"
                  no-caps
                  label="用户管理"
                  class="menu-tab">
@@ -29,7 +29,7 @@
           </q-tab>
 
           <!-- 文章管理 -->
-          <q-tab name="article"
+          <q-tab name="/admin/article"
                  no-caps
                  label="文章管理"
                  class="menu-tab">
@@ -46,7 +46,8 @@
 
         <!-- 搜索 -->
         <div class="search-box">
-          <q-input filled
+          <q-input outlined
+                   color="black"
                    bottom-slots
                    v-model="search"
                    counter
@@ -75,18 +76,35 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   setup () {
-    const tab = ref('user')
+    const router = useRouter()
+
+    const tab = ref('/admin/user')
     const search = ref('')
+
+    function onChangeTab (val) {
+      router.push(val)
+    }
+
+    watch(tab, val => {
+      onChangeTab(val)
+    })
+
+    onBeforeMount(() => {
+      tab.value = location.pathname
+    })
 
     return {
 
       tab,
 
-      search
+      search,
+
+      onChangeTab
 
     }
   }
@@ -96,11 +114,18 @@ export default {
 <style lang="scss" scoped>
 .admin-main-box {
   height: 100%;
+  background-color: #eee;
+  :deep(.q-input .q-field__control) {
+    background-color: #fff;
+  }
   nav {
     width: 200px;
     height: 100%;
-    margin-left: 20px;
+    padding: 0 10px;
     margin-right: 70px;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+      0 3px 1px -2px rgb(0 0 0 / 12%);
+    background-color: #fff;
     .title-box {
       height: 100px;
       width: 100%;

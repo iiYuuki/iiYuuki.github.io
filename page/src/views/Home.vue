@@ -49,18 +49,12 @@
 
               <!-- 第三方平台账号链接 -->
               <div class="third-platform-account row items-center justify-center">
-                <a href="https://qm.qq.com/cgi-bin/qm/qr?k=nla0KRoCmMkF5TpcMDWlCC6L1-v-iDuf&noverify=0"
-                   target="_blank"><i class="iconfont icon-QQ-circle-fill"></i></a>
-                <a href="https://steamcommunity.com/id/Userdesu/"
-                   target="_blank"><i class="iconfont icon-steam"></i></a>
-                <a href="https://space.bilibili.com/22388335"
-                   target="_blank"><i class="iconfont icon-icon_bilibili-circle"></i></a>
-                <a href="https://tieba.baidu.com/home/main?id=tb.1.b632cb9a.Du5BF1MqLUTChCpMzLPklQ"
-                   target="_blank"><i class="iconfont icon-tieba0"></i></a>
-                <a href="https://music.163.com/#/user/home?id=291899294"
-                   target="_blank"><i class="iconfont icon-netease-cloud-music-fill"></i></a>
-                <a href="https://www.zhihu.com/people/SiroApple"
-                   target="_blank"><i class="iconfont icon-zhihu-circle-fill"></i></a>
+                <a v-for="(item, index) in thirdLinks"
+                   :key="index"
+                   :href="item.link"
+                   target="_blank">
+                  <i :class="item.iconClass"></i>
+                </a>
               </div>
             </div>
 
@@ -73,7 +67,8 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { getUserAvatarImgURL } from '@/api'
+import { getUserAvatarImgURL, getThirdLinks } from '@/api'
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'Home',
@@ -81,10 +76,14 @@ export default {
 
   },
   setup () {
+    const $q = useQuasar()
+
     const avatarImgURL = ref('http://localhost:3000/static/imgs/avatar-User.jpg')
     const userSignature = ref('Never Mind.')
     const isMouseEnterUserbox = ref(false)
     const isMouseDownAvatar = ref(false)
+
+    const thirdLinks = ref([])
 
     function getUserAvatarImg () {
       getUserAvatarImgURL()
@@ -92,15 +91,47 @@ export default {
           if (res.code === 200) {
             avatarImgURL.value = res.url
           } else {
-            console.log('error')
+            $q.notify({
+              message: '页面发生错误！',
+              position: 'top',
+              timeout: 1500,
+              color: 'green'
+            })
           }
         }).catch(err => {
           console.log(err)
         })
     }
 
+    function getLinks () {
+      getThirdLinks()
+        .then(res => {
+          if (res.code === 200) {
+            thirdLinks.value = res.data.filter(item => {
+              return item.enable
+            })
+          } else {
+            $q.notify({
+              message: '页面发生错误！',
+              position: 'top',
+              timeout: 1500,
+              color: 'green'
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+          $q.notify({
+            message: '页面发生错误！',
+            position: 'top',
+            timeout: 1500,
+            color: 'green'
+          })
+        })
+    }
+
     function pageInit () {
       getUserAvatarImg()
+      getLinks()
     }
 
     onMounted(() => {
@@ -112,6 +143,8 @@ export default {
       avatarImgURL,
 
       userSignature,
+
+      thirdLinks,
 
       isMouseEnterUserbox,
 

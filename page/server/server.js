@@ -14,6 +14,8 @@ const app = express()
 const pathOfImgs = getIp() + '/static/imgs/'
 const pathOfDB = getIp() + '/static/db/'
 const CurrentPathOfDB = path.join(__dirname, 'public', 'db')
+const CurrentPathOfImgs = path.join(__dirname, 'public', 'imgs')
+const CurrentPathOfUserDB = path.join(CurrentPathOfDB, 'user.json')
 
 // 跨域
 app.all('*', (req, res, next) => {
@@ -73,8 +75,8 @@ app.post('/user/avatar/get', (req, res, next) => {
 
 // 设置用户头像接口
 app.post('/user/avatar/set', (req, res, next) => {
-  const filename = Date.now() + '.png'
-  const filepath = path.join(__dirname, 'public', 'imgs', filename)
+  const filename = Date.now() + '-avatar.png'
+  const filepath = path.join(CurrentPathOfImgs, filename)
   const dataBuffer = Buffer.from(req.body.url.split(',')[1], 'base64')
   fs.writeFile(filepath, dataBuffer, err => {
     if (err) {
@@ -91,6 +93,56 @@ app.post('/user/avatar/set', (req, res, next) => {
       })
     }
   })
+})
+
+// 设置主页左上角标题
+app.post('/user/title/set', (req, res, next) => {
+  try {
+    setUserData(0, {
+      userTitle: req.body.title
+    })
+    res.status(200).send({
+      code: 200
+    })
+  } catch (err) {
+    res.status(500).send({
+      code: -1
+    })
+  }
+})
+
+// 获取主页左上角标题
+app.post('/user/title/get', (req, res, next) => {
+  const data = getUserData(0).userTitle
+  res.send({
+    title: data,
+    code: 200
+  })
+})
+
+// 获取第三方平台账号链接
+app.post('/user/thirdlinks/get', (req, res, next) => {
+  const data = getUserData(0).thirdLinks
+  res.send({
+    code: 200,
+    data: data
+  })
+})
+
+// 设置第三方平台账号链接
+app.post('/user/thirdlinks/set', (req, res, next) => {
+  try {
+    setUserData(0, {
+      thirdLinks: req.body.thirdLinks
+    })
+    res.send({
+      code: 200
+    })
+  } catch (err) {
+    res.status(400).send({
+      code: -1
+    })
+  }
 })
 
 // -----------------------接口部分结束
