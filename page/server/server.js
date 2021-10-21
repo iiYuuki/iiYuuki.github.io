@@ -53,16 +53,9 @@ const storage = multer.diskStorage({
 })
 const uploader = multer({ storage: storage })
 app.post('/file', uploader.single('file'), (req, res, next) => {
-  res.status(200).send(JSON.stringify({
-    errno: 0,
-    data: [
-      {
-        url: pathOfImgs + req.file.filename,
-        alt: req.file.originalname,
-        href: ''
-      }
-    ]
-  }))
+  res.status(200).send({
+    url: pathOfImgs + req.file.filename
+  })
 })
 
 // 获取用户头像接口
@@ -209,8 +202,3 @@ function setUserData (id, params) {
 }
 
 // ------------------------方法部分结束
-
-const a = fs.readFileSync('./asd.txt').toString()
-const mat = /#....../g
-const b = a.match(mat)
-console.log(b.length)
