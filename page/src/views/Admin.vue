@@ -58,7 +58,7 @@
         <!-- 搜索 -->
         <div></div>
         <div class="search-box"
-             v-if="!$router.currentRoute.value.path.includes('/admin/article/edit')">
+             v-if="!$router.currentRoute.value.path.includes('/admin/article/')">
           <q-input outlined
                    color="black"
                    bottom-slots
@@ -115,7 +115,7 @@ export default {
 
     watch(() => router, (val) => {
       const path = val.currentRoute.value.path
-      if (path.includes('/admin/article/edit')) {
+      if (path.includes('/admin/article/')) {
         store.commit('setAdminSide', false)
       }
     }, { deep: true, immediate: true })

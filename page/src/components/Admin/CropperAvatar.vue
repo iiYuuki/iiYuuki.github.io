@@ -23,7 +23,7 @@
       <div class="flex flex-center">
 
         <!-- 确认按钮 -->
-        <q-btn class="btn-gradient-main1 confirm-button"
+        <q-btn class="confirm-button"
                push
                label="确认"
                @click="crop"

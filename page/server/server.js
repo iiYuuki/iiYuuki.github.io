@@ -13,9 +13,10 @@ const app = express()
 
 const pathOfImgs = getIp() + '/static/imgs/'
 const pathOfDB = getIp() + '/static/db/'
-const CurrentPathOfDB = path.join(__dirname, 'public', 'db')
-const CurrentPathOfImgs = path.join(__dirname, 'public', 'imgs')
-const CurrentPathOfUserDB = path.join(CurrentPathOfDB, 'user.json')
+const CurrentPathOfDB = path.join(__dirname, 'public', 'db') // 数据库文件夹
+const CurrentPathOfImgs = path.join(__dirname, 'public', 'imgs') // 图片路径
+const CurrentPathOfUser = path.join(CurrentPathOfDB, 'user.json') // 用户
+const CurrentPathOfArticle = path.join(CurrentPathOfDB, 'article.json') // 文章
 
 // 跨域
 app.all('*', (req, res, next) => {
@@ -68,24 +69,21 @@ app.post('/user/avatar/get', (req, res, next) => {
 
 // 设置用户头像接口
 app.post('/user/avatar/set', (req, res, next) => {
-  const filename = Date.now() + '-avatar.png'
-  const filepath = path.join(CurrentPathOfImgs, filename)
-  const dataBuffer = Buffer.from(req.body.url.split(',')[1], 'base64')
-  fs.writeFile(filepath, dataBuffer, err => {
-    if (err) {
-      res.status(500).send({
-        code: -1
-      })
-    } else {
-      res.status(200).send({
-        code: 200,
-        url: pathOfImgs + filename
-      })
-      setUserData(0, {
-        userAvatarURL: pathOfImgs + filename
-      })
-    }
-  })
+  const url = writeBase64Png('avatar', req.body.url)
+
+  if (url) {
+    res.send({
+      code: 200,
+      url: url
+    })
+    setUserData(0, {
+      userAvatarURL: url
+    })
+  } else {
+    res.status(500).send({
+      code: -1
+    })
+  }
 })
 
 // 设置主页左上角标题
@@ -138,6 +136,52 @@ app.post('/user/thirdlinks/set', (req, res, next) => {
   }
 })
 
+// 获取文章数据
+app.post('/article/get', (req, res, next) => {
+  const data = getArticleData(0).articles
+  res.send({
+    code: 200,
+    data: data
+  })
+})
+
+// 编辑文章
+app.post('/article/edit', (req, res, next) => {
+  try {
+    setArticleData(0, {
+      title: req.body.title,
+      content: req.body.content,
+      cover: req.body.cover,
+      articleID: req.body.articleID
+    })
+    res.send({
+      code: 200
+    })
+  } catch (err) {
+    res.status(400).send({
+      code: -1
+    })
+  }
+})
+
+// 添加文章
+app.post('/article/add', (req, res, next) => {
+  try {
+    setArticleData(0, {
+      title: req.body.title,
+      content: req.body.content,
+      cover: req.body.cover
+    })
+    res.send({
+      code: 200
+    })
+  } catch (err) {
+    res.status(400).send({
+      code: -1
+    })
+  }
+})
+
 // -----------------------接口部分结束
 
 // APP报错时返回500
@@ -167,7 +211,7 @@ function getIp () {
 
 // 返回用户数据列表
 function getUserDataList () {
-  const data = fs.readFileSync(path.join(CurrentPathOfDB, 'user.json'))
+  const data = fs.readFileSync(CurrentPathOfUser)
   return JSON.parse(data)
 }
 
@@ -184,6 +228,24 @@ function getUserData (id) {
   return data
 }
 
+// 返回文章用户数据列表
+function getArticleDataList () {
+  const data = fs.readFileSync(CurrentPathOfArticle)
+  return JSON.parse(data)
+}
+
+// 返回指定用户的文章信息
+function getArticleData (id) {
+  const dataArr = getArticleDataList()
+  let data
+  dataArr.some(item => {
+    if (item.userID === id) {
+      data = item
+      return item.userID === id
+    }
+  })
+  return data
+}
 // 设置用户数据
 function setUserData (id, params) {
   const dataArr = getUserDataList()
@@ -194,11 +256,54 @@ function setUserData (id, params) {
       }
     }
   })
-  fs.writeFile(path.join(CurrentPathOfDB, 'user.json'), JSON.stringify(dataArr, null, 2), err => {
+  fs.writeFile(CurrentPathOfUser, JSON.stringify(dataArr, null, 2), err => {
     if (err) {
       console.log(err)
     }
   })
+}
+// 设置文章数据
+function setArticleData (id, params) {
+  const dataArr = getArticleDataList()
+  dataArr.map((item) => {
+    if (item.userID === id) {
+      if (!params.articleID) {
+        item.articles.push({
+          title: params.title,
+          content: params.content,
+          cover: params.cover,
+          articleID: item.articles.length + 1
+        })
+      } else {
+        item.articles.map(article => {
+          if (article.articleID === params.articleID) {
+            for (const i in params) {
+              article[i] = params[i]
+            }
+          }
+        })
+      }
+    }
+  })
+  fs.writeFile(CurrentPathOfArticle, JSON.stringify(dataArr, null, 2), err => {
+    if (err) {
+      console.log(err)
+    }
+  })
+}
+
+// base64写入图片
+function writeBase64Png (fname, urlBase64) {
+  const filename = Date.now() + `-${fname}.png`
+  const filepath = path.join(CurrentPathOfImgs, filename)
+  const dataBuffer = Buffer.from(urlBase64.split(',')[1], 'base64')
+  try {
+    fs.writeFileSync(filepath, dataBuffer)
+    return pathOfImgs + filename
+  } catch (err) {
+    console.log(err)
+    return false
+  }
 }
 
 // ------------------------方法部分结束

@@ -72,3 +72,24 @@ export function setThirdLinks (data) {
     '/user/thirdlinks/set',
     data)
 }
+
+// 获取文章列表信息
+export function getArticles (data) {
+  return service.post(
+    '/article/get',
+    data)
+}
+
+// 编辑文章
+export function EditArticle (data) {
+  return service.post(
+    '/article/edit',
+    data)
+}
+
+// 新建文章
+export function addArticle (data) {
+  return service.post(
+    '/article/add',
+    data)
+}

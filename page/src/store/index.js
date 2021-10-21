@@ -6,7 +6,7 @@ export default createStore({
   },
   mutations: {
     setAdminSide (state, data) {
-      if (!data) {
+      if (data === undefined) {
         state.isAdminSideShow = !state.isAdminSideShow
       } else {
         state.isAdminSideShow = data

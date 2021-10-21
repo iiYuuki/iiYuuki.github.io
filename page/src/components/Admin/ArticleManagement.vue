@@ -2,65 +2,119 @@
   <div class="article-management-box">
 
     <!-- 文章区域 -->
-    <div class="articles row">
+    <div>
 
-      <!-- 图片 -->
-      <router-link to="/admin/article/edit">
-        <q-img src="@/assets/bg1.jpg" />
-      </router-link>
+      <div class="row q-mb-md">
+        <q-btn label="写文章"
+               @click="$router.push('/admin/article/add')"
+               color="primary" />
+      </div>
 
-      <!-- 信息区域 -->
-      <div class="article-info-box column justify-between">
-        <div class="row items-center">
+      <div v-if="articleList.length > 0">
+        <div v-for="(item, index) in articleList"
+             :key="index"
+             class="articles row">
 
-          <!-- 分类 -->
-          <div class="article-category-box">技术</div>
+          <!-- 图片 -->
+          <router-link :to="`/admin/article/edit/${item.articleID}`">
+            <q-img :src="item.cover" />
+          </router-link>
 
-          <!-- 标题 -->
-          <router-link to="/admin/article/edit">这是文章1</router-link>
+          <!-- 信息区域 -->
+          <div class="article-info-box column justify-between">
+            <div class="row items-center">
 
-        </div>
+              <!-- 分类 -->
+              <div class="article-category-box">技术</div>
 
-        <!-- 时间 -->
-        <p class="time">2021-10-19 18:22:33</p>
+              <!-- 标题 -->
+              <router-link :to="`/admin/article/edit/${item.articleID}`">{{ item.title }}</router-link>
 
-        <div class="row views-info">
+            </div>
 
-          <!-- 阅读量 -->
-          <div>
-            <q-icon name="visibility" /> 阅读量 12
+            <!-- 时间 -->
+            <p class="time">2021-10-19 18:22:33</p>
+
+            <div class="row views-info">
+
+              <!-- 阅读量 -->
+              <div>
+                <q-icon name="visibility" /> 阅读量 12
+              </div>
+
+            </div>
+
           </div>
 
+          <div class="col"></div>
+
+          <!-- 管理操作区域 -->
+          <div class="row items-center">
+
+            <!-- 删除 -->
+            <q-btn round
+                   size="md"
+                   color="red"
+                   class="q-mr-md"
+                   icon="delete" />
+          </div>
         </div>
-
       </div>
 
-      <div class="col"></div>
-
-      <!-- 管理操作区域 -->
-      <div class="row items-center">
-
-        <!-- 编辑 -->
-        <q-btn round
-               size="md"
-               class="q-mr-md"
-               color="primary"
-               icon="edit" />
-
-        <!-- 删除 -->
-        <q-btn round
-               size="md"
-               color="red"
-               class="q-mr-md"
-               icon="delete" />
-      </div>
+      <!-- 暂无数据 -->
+      <div v-else
+           class="nodata-box">暂无数据</div>
     </div>
+
   </div>
 </template>
 
 <script>
-export default {
+import { getArticles } from '@/api'
+import { useQuasar } from 'quasar'
+import { onMounted, ref } from '@vue/runtime-core'
 
+export default {
+  setup () {
+    const $q = useQuasar()
+
+    const articleList = ref([])
+
+    function getArticleList () {
+      getArticles()
+        .then(res => {
+          if (res.code !== 200) {
+            $q.notify({
+              message: '页面发生错误！',
+              position: 'top',
+              timeout: 1500,
+              color: 'green'
+            })
+          } else {
+            articleList.value = res.data
+            console.log(res)
+          }
+        }).catch(err => {
+          console.log(err)
+          $q.notify({
+            message: '页面发生错误！',
+            position: 'top',
+            timeout: 1500,
+            color: 'green'
+          })
+        })
+    }
+
+    onMounted(() => {
+      getArticleList()
+    })
+
+    return {
+
+      articleList
+
+    }
+  }
 }
 </script>
 
@@ -102,6 +156,18 @@ export default {
         color: #666;
       }
     }
+  }
+  .nodata-box {
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+      0 3px 1px -2px rgb(0 0 0 / 12%);
+    border-radius: 6px;
+    background-color: #fff;
+    text-align: center;
+    height: 300px;
+    line-height: 300px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #888;
   }
 }
 </style>
