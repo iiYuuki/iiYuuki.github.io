@@ -92,6 +92,7 @@
 <script>
 import { ref, defineAsyncComponent, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
+import { base64ToBlob } from '@/utils/base64ToBlob'
 import { setUserAvatarImgURL, getUserAvatarImgURL, setUserTitle, getUserTitle, getThirdLinks, setThirdLinks } from '@/api'
 
 export default {
@@ -211,36 +212,47 @@ export default {
       return true
     }
 
-    function onResultAvatar (url) {
-      setUserAvatarImgURL({
-        url: url
-      }).then(res => {
-        if (res.code === 200) {
-          $q.notify({
-            message: '修改成功！',
-            position: 'top',
-            timeout: 1500,
-            color: 'green'
-          })
-          setTimeout(() => {
-            initPage()
-          }, 200)
-        } else {
-          $q.notify({
-            message: '修改失败！',
-            position: 'top',
-            timeout: 1500,
-            color: 'green'
+    function onResultAvatar (urlBase64) {
+      const base64 = urlBase64.split(',')[1]
+      base64ToBlob({ b64data: base64, contentType: 'image/png' }).then(async res => {
+        // eslint-disable-next-line no-undef
+        const blobFile = await imageConversion.compressAccurately(res, 100) // 若图片文件大于100KB，则压缩到100KB
+        console.log('blob', res)
+        const reader = new FileReader()
+        reader.readAsDataURL(blobFile)
+        reader.onload = () => {
+          const url = reader.result
+          setUserAvatarImgURL({
+            url: url
+          }).then(res => {
+            if (res.code === 200) {
+              $q.notify({
+                message: '修改成功！',
+                position: 'top',
+                timeout: 1500,
+                color: 'green'
+              })
+              setTimeout(() => {
+                initPage()
+              }, 200)
+            } else {
+              $q.notify({
+                message: '修改失败！',
+                position: 'top',
+                timeout: 1500,
+                color: 'green'
+              })
+            }
+          }).catch(err => {
+            console.log(err)
+            $q.notify({
+              message: '修改失败！',
+              position: 'top',
+              timeout: 1500,
+              color: 'green'
+            })
           })
         }
-      }).catch(err => {
-        console.log(err)
-        $q.notify({
-          message: '修改失败！',
-          position: 'top',
-          timeout: 1500,
-          color: 'green'
-        })
       })
     }
 
