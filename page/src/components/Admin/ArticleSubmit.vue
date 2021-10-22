@@ -52,6 +52,25 @@
           </div>
         </div>
 
+        <div class="row input-outer-box">
+          <div class="col-3 form-label">分类<span style="color: #F35676">*</span></div>
+          <div class="col-7 row items-center">
+
+            <!-- 分类 -->
+            <q-input class="col"
+                     outlined
+                     counter
+                     dense
+                     :disable="isAdding"
+                     maxlength="10"
+                     placeholder="最大10个文字"
+                     v-model="category"
+                     :rules="[
+                    val => val !== null && val !== '' || '分类不能为空！',
+             ]" />
+          </div>
+        </div>
+
         <div class="flex flex-center q-mb-sm">
 
           <!-- 确认按钮 -->
@@ -81,7 +100,7 @@
 <script>
 import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import { addArticle } from '@/api'
+import { addArticle, EditArticle } from '@/api'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -89,7 +108,7 @@ export default {
 
   emits: ['dialogClose'],
 
-  props: ['content'],
+  props: ['data', 'id'],
 
   components: {
     CropperRect: defineAsyncComponent(() => import('./CropperRect.vue'))
@@ -99,46 +118,96 @@ export default {
     const $q = useQuasar()
     const router = useRouter()
 
-    const title = ref('')
+    const title = ref(props.data.title)
     const fileInputRef = ref(null)
     const isCrop = ref(false)
     const isAdding = ref(false)
     const cropperImgURL = ref('')
-    const coverURL = ref('')
+    const coverURL = ref(props.data.coverURL)
+    const category = ref(props.data.category)
+
+    console.log(props.data.content)
 
     function submit () {
-      if (!coverURL.value) return
-      isAdding.value = true
-      addArticle({
-        title: title.value,
-        content: props.content,
-        cover: coverURL.value
-      }).then(res => {
-        if (res.code === 200) {
-          $q.notify({
-            position: 'top',
-            timeout: 1500,
-            message: '添加文章成功！',
-            color: 'green'
-          })
-          router.push('/admin/article')
-        } else {
-          $q.notify({
-            position: 'top',
-            timeout: 1500,
-            message: '添加失败！',
-            color: 'red'
-          })
-        }
-      }).catch(err => {
-        console.log(err)
+      if (!coverURL.value) {
         $q.notify({
           position: 'top',
           timeout: 1500,
-          message: '请上传图片文件！',
+          message: '图片不能为空！',
           color: 'red'
         })
-      })
+        return
+      }
+      isAdding.value = true
+      const param = {
+        title: title.value,
+        content: props.data.content,
+        cover: coverURL.value,
+        category: category.value
+      }
+      if (location.pathname.includes('add')) {
+        console.log(param)
+        addArticle(param)
+          .then(res => {
+            isAdding.value = false
+            if (res.code === 200) {
+              $q.notify({
+                position: 'top',
+                timeout: 1500,
+                message: '添加文章成功！',
+                color: 'green'
+              })
+              router.push('/admin/article')
+            } else {
+              $q.notify({
+                position: 'top',
+                timeout: 1500,
+                message: '添加失败！',
+                color: 'red'
+              })
+            }
+          }).catch(err => {
+            isAdding.value = false
+            console.log(err)
+            $q.notify({
+              position: 'top',
+              timeout: 1500,
+              message: '添加失败！',
+              color: 'red'
+            })
+          })
+      } else {
+        param.articleID = props.id - 0
+        EditArticle(param)
+          .then(res => {
+            isAdding.value = false
+            if (res.code === 200) {
+              $q.notify({
+                position: 'top',
+                timeout: 1500,
+                message: '编辑文章成功！',
+                color: 'green'
+              })
+              router.push('/admin/article')
+            } else {
+              $q.notify({
+                position: 'top',
+                timeout: 1500,
+                message: '添加失败！',
+                color: 'red'
+              })
+            }
+          }).catch(err => {
+            isAdding.value = false
+            console.log(err)
+            $q.notify({
+              position: 'top',
+              timeout: 1500,
+              message: '请上传图片文件！',
+              color: 'red'
+            })
+          })
+      }
     }
 
     function upload () {
@@ -182,6 +251,7 @@ export default {
       isCrop,
       coverURL,
       isAdding,
+      category,
 
       onChange,
       upload,

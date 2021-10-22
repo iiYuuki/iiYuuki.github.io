@@ -79,7 +79,11 @@
 
         <!-- 管理内容区 -->
         <div class="management-box col">
-          <router-view />
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
         </div>
 
       </section>
@@ -118,6 +122,7 @@ export default {
       if (path.includes('/admin/article/')) {
         store.commit('setAdminSide', false)
       }
+      tab.value = val.currentRoute.value.path
     }, { deep: true, immediate: true })
 
     onBeforeMount(() => {

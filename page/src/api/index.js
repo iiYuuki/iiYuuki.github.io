@@ -93,3 +93,10 @@ export function addArticle (data) {
     '/article/add',
     data)
 }
+
+// 删除文章
+export function deleteArticle (data) {
+  return service.post(
+    '/article/delete',
+    data)
+}

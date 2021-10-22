@@ -4,16 +4,17 @@
       <div class="w main-box row justify-center">
 
         <!-- 左侧主区域 -->
-        <div class="main-left-box col-8">
+        <div class="main-left-box col-7">
 
           <!-- 内容部分 -->
-          <router-link v-for="(i, index) in 10"
+          <router-link v-for="(item, index) in articleList"
                        :key="index"
-                       :to="`/article/${i}`">
-            <q-card class="articles hover-bigger">
-              <q-img src="@/assets/bg1.jpg"></q-img>
+                       :to="`/article/${item.articleID}`">
+            <q-card class="articles hover-bigger"
+                    v-ratio>
+              <q-img :src="item.cover"></q-img>
               <div class="article-info-box">
-                <p>Hello Blog{{ i }}</p>
+                <p>{{ item.title }}</p>
                 <span>Nothing..but lies</span>
               </div>
             </q-card>
@@ -67,8 +68,8 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { getUserAvatarImgURL, getThirdLinks } from '@/api'
-import { useQuasar } from 'quasar'
+import { getUserAvatarImgURL, getThirdLinks, getArticles } from '@/api'
+import { useQuasar, QSpinnerIos } from 'quasar'
 
 export default {
   name: 'Home',
@@ -82,6 +83,7 @@ export default {
     const userSignature = ref('Never Mind.')
     const isMouseEnterUserbox = ref(false)
     const isMouseDownAvatar = ref(false)
+    const articleList = ref([])
 
     const thirdLinks = ref([])
 
@@ -129,9 +131,45 @@ export default {
         })
     }
 
+    function getArticleList () {
+      $q.loading.show({
+        spinner: QSpinnerIos,
+        spinnerColor: 'white',
+        spinnerSize: 140
+      })
+
+      getArticles()
+        .then(res => {
+          $q.loading.hide()
+          if (res.code !== 200) {
+            $q.notify({
+              message: '页面发生错误！',
+              position: 'top',
+              timeout: 1500,
+              color: 'red'
+            })
+          } else {
+            articleList.value = res.data.sort((a, b) => {
+              return b.createTime - a.createTime
+            })
+            console.log(res)
+          }
+        }).catch(err => {
+          console.log(err)
+          $q.loading.hide()
+          $q.notify({
+            message: '页面发生错误！',
+            position: 'top',
+            timeout: 1500,
+            color: 'red'
+          })
+        })
+    }
+
     function pageInit () {
       getUserAvatarImg()
       getLinks()
+      getArticleList()
     }
 
     onMounted(() => {
@@ -141,15 +179,18 @@ export default {
     return {
 
       avatarImgURL,
-
       userSignature,
-
       thirdLinks,
-
       isMouseEnterUserbox,
+      isMouseDownAvatar,
+      articleList
 
-      isMouseDownAvatar
-
+    }
+  },
+  directives: {
+    ratio: el => {
+      console.log(el)
+      el.style.height = (el.clientWidth / 7 * 4) + 'px'
     }
   }
 }

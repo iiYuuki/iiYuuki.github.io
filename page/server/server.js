@@ -152,8 +152,9 @@ app.post('/article/edit', (req, res, next) => {
       title: req.body.title,
       content: req.body.content,
       cover: req.body.cover,
-      articleID: req.body.articleID
-    })
+      articleID: req.body.articleID,
+      category: req.body.category
+    }, false)
     res.send({
       code: 200
     })
@@ -170,8 +171,27 @@ app.post('/article/add', (req, res, next) => {
     setArticleData(0, {
       title: req.body.title,
       content: req.body.content,
-      cover: req.body.cover
+      cover: req.body.cover,
+      category: req.body.category,
+      createTime: parseInt(Date.now() / 1000)
+    }, false)
+    res.send({
+      code: 200
     })
+  } catch (err) {
+    res.status(400).send({
+      code: -1,
+      errMsg: err
+    })
+  }
+})
+
+// 删除文章
+app.post('/article/delete', (req, res, next) => {
+  try {
+    setArticleData(0, {
+      articleID: req.body.articleID
+    }, true)
     res.send({
       code: 200
     })
@@ -263,25 +283,38 @@ function setUserData (id, params) {
   })
 }
 // 设置文章数据
-function setArticleData (id, params) {
+function setArticleData (id, params, isDelete) {
   const dataArr = getArticleDataList()
   dataArr.map((item) => {
     if (item.userID === id) {
-      if (!params.articleID) {
+      if (params.articleID === undefined) {
         item.articles.push({
           title: params.title,
           content: params.content,
           cover: params.cover,
-          articleID: item.articles.length + 1
+          articleID: item.articles.length + 1,
+          category: params.category,
+          createTime: params.createTime
         })
       } else {
-        item.articles.map(article => {
-          if (article.articleID === params.articleID) {
-            for (const i in params) {
-              article[i] = params[i]
+        if (isDelete === true) {
+          item.articles = item.articles.filter(item => {
+            return item.articleID !== params.articleID
+          })
+          item.articles.map((article, index, arr) => {
+            article.articleID = index + 1
+          })
+        } else {
+          item.articles.map(article => {
+            console.log(article.articleID)
+            if (article.articleID === params.articleID) {
+              console.log(123)
+              for (const i in params) {
+                article[i] = params[i]
+              }
             }
-          }
-        })
+          })
+        }
       }
     }
   })

@@ -67,7 +67,8 @@
   <q-dialog no-backdrop-dismiss
             v-model="isSubmit">
     <ArticleSubmit @dialogClose="isSubmit = false"
-                   :content="ht" />
+                   :id="id"
+                   :data="articleData" />
   </q-dialog>
 
 </template>
@@ -75,7 +76,7 @@
 <script>
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark-dimmed.css'
-import { onBeforeUnmount, onMounted, ref, watch, defineAsyncComponent } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch, defineAsyncComponent, reactive, computed } from 'vue'
 import colors from '@/utils/font-color'
 import { getArticles } from '@/api'
 import { useQuasar } from 'quasar'
@@ -101,6 +102,13 @@ export default {
     const isInsertCode = ref(false)
     const isSubmit = ref(false)
     const viewHeight = ref(500)
+
+    const articleData = reactive({
+      content: computed(() => ht.value),
+      title: '',
+      category: '',
+      coverURL: ''
+    })
 
     let editor
 
@@ -186,7 +194,9 @@ export default {
             res.data.some(item => {
               if (item.articleID === props.id - 0) {
                 editor.value = item.content
-                console.log(item.content)
+                articleData.title = item.title
+                articleData.category = item.category
+                articleData.coverURL = item.cover
                 return item.articleID === props.id
               }
             })
@@ -243,6 +253,7 @@ export default {
       editorRef,
       insertCode,
       initEditor,
+      articleData,
       save
     }
   }
