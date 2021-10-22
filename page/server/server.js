@@ -231,6 +231,7 @@ app.use((err, req, res, next) => {
 // 返回当前ip+端口号
 function getIp () {
   const f = os.networkInterfaces()
+  let ip = ''
   for (const i in f) {
     const face = f[i]
     let addr = null
@@ -241,8 +242,14 @@ function getIp () {
       }
     })
     if (addr !== null) {
-      return addr
+      ip = addr
+      break
     }
+  }
+  if (ip.includes('192.168')) {
+    return ip
+  } else {
+    return 'http://1.12.230.238:3000'
   }
 }
 

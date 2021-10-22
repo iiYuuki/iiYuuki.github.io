@@ -79,7 +79,7 @@ export default {
   setup () {
     const $q = useQuasar()
 
-    const avatarImgURL = ref('http://localhost:3000/static/imgs/avatar-User.jpg')
+    const avatarImgURL = ref('')
     const userSignature = ref('Never Mind.')
     const isMouseEnterUserbox = ref(false)
     const isMouseDownAvatar = ref(false)
