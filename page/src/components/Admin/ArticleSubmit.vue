@@ -101,6 +101,7 @@
 import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import { addArticle, EditArticle } from '@/api'
+import { base64ToBlob } from '@/utils/base64ToBlob'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -236,8 +237,18 @@ export default {
       return true
     }
 
-    function onResult (url) {
-      coverURL.value = url
+    function onResult (urlBase64) {
+      const base64 = urlBase64.split(',')[1]
+      base64ToBlob({ b64data: base64, contentType: 'image/png' }).then(async res => {
+        // eslint-disable-next-line no-undef
+        const blobFile = await imageConversion.compressAccurately(res, 100) // 若图片文件大于100KB，则压缩到100KB
+        console.log('blob', res)
+        const reader = new FileReader()
+        reader.readAsDataURL(blobFile)
+        reader.onload = () => {
+          coverURL.value = reader.result
+        }
+      })
     }
 
     onMounted(() => {

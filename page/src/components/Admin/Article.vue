@@ -78,7 +78,7 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark-dimmed.css'
 import { onBeforeUnmount, onMounted, ref, watch, defineAsyncComponent, reactive, computed } from 'vue'
 import colors from '@/utils/font-color'
-import { getArticles } from '@/api'
+import { getArticle } from '@/api'
 import { useQuasar } from 'quasar'
 
 export default {
@@ -158,6 +158,12 @@ export default {
     }
 
     function save () {
+      $q.notify({
+        position: 'top',
+        timeout: 1500,
+        message: '该功能还未开放！',
+        color: 'red'
+      })
     }
 
     function insertCode () {
@@ -188,18 +194,15 @@ export default {
     }
 
     function getArticleData () {
-      getArticles()
+      getArticle({
+        articleID: props.id - 0
+      })
         .then(res => {
           if (res.code === 200) {
-            res.data.some(item => {
-              if (item.articleID === props.id - 0) {
-                editor.value = item.content
-                articleData.title = item.title
-                articleData.category = item.category
-                articleData.coverURL = item.cover
-                return item.articleID === props.id
-              }
-            })
+            editor.value = res.data.content
+            articleData.title = res.data.title
+            articleData.category = res.data.category
+            articleData.coverURL = res.data.cover
           } else {
             $q.notify({
               message: '页面发生错误！',

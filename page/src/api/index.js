@@ -80,6 +80,13 @@ export function getArticles (data) {
     data)
 }
 
+// 获取文章数据
+export function getArticle (data) {
+  return service.post(
+    '/article/getone',
+    data)
+}
+
 // 编辑文章
 export function EditArticle (data) {
   return service.post(

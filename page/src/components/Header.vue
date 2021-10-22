@@ -18,6 +18,7 @@
       <nav class="header-nav row">
         <router-link :to="{name: 'Home'}">主页</router-link>
         <router-link :to="{name: 'About'}">关于</router-link>
+        <router-link to="/admin">管理界面</router-link>
         <router-link v-if="isDev"
                      :to="{name: 'Test'}">Test Page</router-link>
       </nav>
@@ -100,7 +101,7 @@ header {
     width: 100%;
     opacity: 0.9;
     z-index: 0;
-    background-image: url('../assets/home-hotpoint-bg.png');
+    background-image: url("../assets/home-hotpoint-bg.png");
     background-repeat: no-repeat;
     background-color: rgb(51, 48, 73);
     background-size: 2860px;

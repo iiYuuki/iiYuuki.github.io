@@ -138,10 +138,27 @@ app.post('/user/thirdlinks/set', (req, res, next) => {
 
 // 获取文章数据
 app.post('/article/get', (req, res, next) => {
-  const data = getArticleData(0).articles
+  const data = getArticleData(0).articles.map(article => {
+    article.content = ''
+    return article
+  })
   res.send({
     code: 200,
     data: data
+  })
+})
+
+// 获取指定用户的单篇文章数据
+app.post('/article/getone', (req, res, next) => {
+  const data = getArticleData(0).articles
+  data.some(item => {
+    if (item.articleID === req.body.articleID) {
+      res.send({
+        code: 200,
+        data: item
+      })
+      return item.articleID === req.body.articleID
+    }
   })
 })
 

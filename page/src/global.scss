@@ -122,6 +122,9 @@ a:hover {
 }
 :hover::-webkit-scrollbar-thumb {
   background-color: #434953;
+  border: 4px solid rgba(0,0,0,0);
+}
+:hover::-webkit-scrollbar-thumb:hover {
   border: 2px solid rgba(0,0,0,0);
 }
 ::-webkit-scrollbar-corner,

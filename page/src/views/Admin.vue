@@ -49,6 +49,12 @@
           </q-tab>
         </q-tabs>
       </div>
+
+      <!-- 返回用户页面 -->
+
+      <router-link to="/"
+                   class="back-to-user">返回用户页面</router-link>
+
     </nav>
 
     <div class="col">
@@ -79,11 +85,7 @@
 
         <!-- 管理内容区 -->
         <div class="management-box col">
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
+          <router-view />
         </div>
 
       </section>
@@ -199,6 +201,18 @@ export default {
         // transform: translateX(50%);
       }
     }
+    .back-to-user {
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 40px;
+      transition: all 0.2;
+      cursor: pointer;
+      color: skyblue;
+      &:hover {
+        background-color: #eee;
+        border-radius: 8px;
+      }
+    }
   }
   section {
     height: 100%;
@@ -208,6 +222,9 @@ export default {
     min-width: 800px;
     max-width: 1200px;
     .search-box {
+      position: sticky;
+      top: 20px;
+      z-index: 10;
       margin-bottom: 20px;
     }
   }
