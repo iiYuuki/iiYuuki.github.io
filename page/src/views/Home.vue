@@ -15,7 +15,7 @@
               <q-img :src="item.cover"></q-img>
               <div class="article-info-box">
                 <p>{{ item.title }}</p>
-                <span>Nothing..but lies</span>
+                <span>{{ item.category }}</span>
               </div>
             </q-card>
           </router-link>
