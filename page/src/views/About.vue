@@ -2,7 +2,7 @@
   <div class="about">
     <section class="w">
       <h2>This is an about page</h2>
-      <p>Theme desinged by User</p>
+      <p>Theme desinged by <span class="user">iYuuki</span></p>
     </section>
 
   </div>
@@ -20,5 +20,9 @@ h2 {
 }
 p {
   text-align: center;
+  .user {
+    color: pink;
+    font-weight: 600;
+  }
 }
 </style>

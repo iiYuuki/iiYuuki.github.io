@@ -132,15 +132,8 @@ export default {
     }
 
     function getArticleList () {
-      $q.loading.show({
-        spinner: QSpinnerIos,
-        spinnerColor: 'white',
-        spinnerSize: 140
-      })
-
       getArticles()
         .then(res => {
-          $q.loading.hide()
           if (res.code !== 200) {
             $q.notify({
               message: '页面发生错误！',
@@ -156,7 +149,6 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          $q.loading.hide()
           $q.notify({
             message: '页面发生错误！',
             position: 'top',

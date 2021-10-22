@@ -222,7 +222,9 @@ export default {
             timeout: 1500,
             color: 'green'
           })
-          initPage()
+          setTimeout(() => {
+            initPage()
+          }, 200)
         } else {
           $q.notify({
             message: '修改失败！',
@@ -277,7 +279,9 @@ export default {
             timeout: 1500,
             color: 'green'
           })
-          initPage()
+          setTimeout(() => {
+            initPage()
+          }, 200)
         } else {
           $q.notify({
             message: '修改失败！',
