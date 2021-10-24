@@ -33,7 +33,7 @@ app.use(express.json({ limit: '50mb' }))
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 // 监听端口3000
-app.listen(3000)
+app.listen(3000, '0.0.0.0')
 
 app.get('/', (req, res) => {
   const realPath = path.join(__dirname, 'public', '123.txt')
@@ -56,6 +56,14 @@ const uploader = multer({ storage: storage })
 app.post('/file', uploader.single('file'), (req, res, next) => {
   res.status(200).send({
     url: pathOfImgs + req.file.filename
+  })
+})
+
+// 获取用户登录信息
+app.post('/user/info', (req, res, next) => {
+  res.send({
+    code: 200,
+    ip: req.ip
   })
 })
 
@@ -228,7 +236,7 @@ app.use((err, req, res, next) => {
 
 // -----------------------方法部分
 
-// 返回当前ip+端口号
+// 返回当前服务端ip+端口号
 function getIp () {
   const f = os.networkInterfaces()
   let ip = ''
@@ -252,6 +260,14 @@ function getIp () {
     return 'http://1.12.230.238:3000'
   }
 }
+
+// 获取当前客户端ip
+function getClientIp (req) {
+  return req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress || ''
+};
 
 // 返回用户数据列表
 function getUserDataList () {

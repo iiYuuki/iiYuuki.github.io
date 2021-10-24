@@ -2,7 +2,7 @@
   <div class="article-main-box">
     <article class="shadow">
       <h1 class="title">{{ title }}</h1>
-      <div class="time">{{ formattedTime(time) }}</div>
+      <div class="time">{{ time ? formattedTime(time) : ''}}</div>
       <div class="content"
            ref="articleContentRef"
            v-html="content"></div>
@@ -12,7 +12,7 @@
 
 <script>
 import { onMounted, ref, computed } from 'vue'
-import { useQuasar } from 'quasar'
+import { useQuasar, QSpinnerIos } from 'quasar'
 import { getArticle } from '@/api'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark-dimmed.css'
@@ -41,10 +41,17 @@ export default {
     })
 
     function getArticleData () {
+      $q.loading.show({
+        spinner: QSpinnerIos,
+        spinnerColor: 'white',
+        spinnerSize: 140
+      })
+
       getArticle({
         articleID: props.id - 0
       })
         .then(res => {
+          $q.loading.hide()
           if (res.code === 200) {
             title.value = res.data.title
             category.value = res.data.category
@@ -59,6 +66,7 @@ export default {
             })
           }
         }).catch(err => {
+          $q.loading.hide()
           console.log(err)
           $q.notify({
             message: '页面发生错误！',
@@ -99,7 +107,7 @@ export default {
   article {
     max-width: 800px;
     min-width: 600px;
-    min-height: 400px;
+    min-height: 500px;
     margin: auto;
     background-color: #fff;
     border-radius: 8px;

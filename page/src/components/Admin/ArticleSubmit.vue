@@ -158,7 +158,9 @@ export default {
                 message: '添加文章成功！',
                 color: 'green'
               })
-              router.push('/admin/article')
+              setTimeout(() => {
+                router.push('/admin/article')
+              }, 200)
             } else {
               $q.notify({
                 position: 'top',
@@ -189,7 +191,9 @@ export default {
                 message: '编辑文章成功！',
                 color: 'green'
               })
-              router.push('/admin/article')
+              setTimeout(() => {
+                router.push('/admin/article')
+              }, 200)
             } else {
               $q.notify({
                 position: 'top',

@@ -31,6 +31,13 @@ export default service
 
 // ------接口部分
 
+// 获取登录信息
+export function getLoginInfo (data) {
+  return service.post(
+    '/user/info',
+    data)
+}
+
 // 获取用户头像
 export function getUserAvatarImgURL (data) {
   return service.post(

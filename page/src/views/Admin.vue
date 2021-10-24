@@ -95,14 +95,16 @@
 </template>
 
 <script>
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
 
 export default {
   setup () {
     const router = useRouter()
     const store = useStore()
+    const $q = useQuasar()
 
     const tab = ref('/admin/user')
     const search = ref('')
@@ -127,8 +129,22 @@ export default {
       tab.value = val.currentRoute.value.path
     }, { deep: true, immediate: true })
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       tab.value = location.pathname
+      if (location.href.includes('192.168') || location.href.includes('localhost')) {
+
+      } else if (!store.state.isAdmin) {
+        router.push('/')
+        $q.notify({
+          message: '只有管理员才能进入该页面哦！~',
+          position: 'top',
+          timeout: 1500,
+          color: 'red'
+        })
+      }
+    })
+
+    onMounted(() => {
     })
 
     console.log(router.currentRoute.value.path)

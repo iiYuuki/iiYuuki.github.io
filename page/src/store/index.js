@@ -2,7 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    isAdminSideShow: true
+    isAdminSideShow: true,
+    isAdmin: false
   },
   mutations: {
     setAdminSide (state, data) {
@@ -10,6 +11,13 @@ export default createStore({
         state.isAdminSideShow = !state.isAdminSideShow
       } else {
         state.isAdminSideShow = data
+      }
+    },
+    setIsAdmin (state, data) {
+      if (process.env.NODE_ENV !== 'production') {
+        state.isAdmin = true
+      } else {
+        state.isAdmin = data
       }
     }
   },

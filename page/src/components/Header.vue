@@ -18,8 +18,9 @@
       <nav class="header-nav row">
         <router-link :to="{name: 'Home'}">主页</router-link>
         <router-link :to="{name: 'About'}">关于</router-link>
-        <router-link to="/admin">管理界面</router-link>
-        <router-link v-if="isDev"
+        <router-link v-if="isAdmin"
+                     to="/admin">管理界面</router-link>
+        <router-link v-if="isAdmin"
                      :to="{name: 'Test'}">Test Page</router-link>
       </nav>
     </div>
@@ -30,13 +31,15 @@
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { getUserTitle } from '@/api'
+import { useStore } from 'vuex'
 
 export default {
   setup () {
     const $q = useQuasar()
+    const store = useStore()
 
     const title = ref('')
-    const isDev = process.env.NODE_ENV !== 'production'
+    const isAdmin = store.state.isAdmin
 
     function getTitle () {
       getUserTitle()
@@ -70,7 +73,7 @@ export default {
 
       title,
 
-      isDev
+      isAdmin
 
     }
   }

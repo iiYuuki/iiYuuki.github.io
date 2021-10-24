@@ -26,6 +26,10 @@ const routes = [
         path: '/article/:id',
         component: () => import('../views/Article.vue'),
         props: true
+      },
+      {
+        path: '/:catchAll(.*)*',
+        component: () => import('../views/404Error.vue')
       }
     ]
   },
@@ -58,10 +62,6 @@ const routes = [
         props: true
       }
     ]
-  },
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('../views/404Error.vue')
   }
 ]
 

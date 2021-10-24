@@ -79,7 +79,7 @@ import 'highlight.js/styles/github-dark-dimmed.css'
 import { onBeforeUnmount, onMounted, ref, watch, defineAsyncComponent, reactive, computed } from 'vue'
 import colors from '@/utils/font-color'
 import { getArticle } from '@/api'
-import { useQuasar } from 'quasar'
+import { useQuasar, QSpinnerIos } from 'quasar'
 
 export default {
   name: 'Admin Article',
@@ -136,7 +136,13 @@ export default {
         allowResizeX: false
       })
       editor.events.on('change', val => {
-        ht.value = val
+        if (window.editorChangeTimer) {
+          clearTimeout(window.editorChangeTimer)
+          window.editorChangeTimer = null
+        }
+        setTimeout(() => {
+          ht.value = val
+        }, 2000)
       })
       setViewHeight()
     }
@@ -148,7 +154,6 @@ export default {
           editorEle = document.getElementById('editor-box')
         }, 10)
       }
-      console.log(editorEle.clientHeight)
       viewHeight.value = editorEle.clientHeight
     }
 
@@ -194,10 +199,17 @@ export default {
     }
 
     function getArticleData () {
+      $q.loading.show({
+        spinner: QSpinnerIos,
+        spinnerColor: 'white',
+        spinnerSize: 140
+      })
+
       getArticle({
         articleID: props.id - 0
       })
         .then(res => {
+          $q.loading.hide()
           if (res.code === 200) {
             editor.value = res.data.content
             articleData.title = res.data.title
@@ -212,6 +224,7 @@ export default {
             })
           }
         }).catch(err => {
+          $q.loading.hide()
           console.log(err)
           $q.notify({
             message: '页面发生错误！',
